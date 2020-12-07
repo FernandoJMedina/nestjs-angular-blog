@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Fer2\",\n    \"username\": \"ferchapaisano2\"\n}",
+							"raw": "{\n    \"name\": \"Fer2\",\n    \"username\": \"ferchapaisano2\",\n    \"email\":\"fer@paisano.com\",\n    \"password\":\"simplePassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -61,7 +61,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:4000/api/users/2",
+							"raw": "localhost:4000/api/users/3",
 							"host": [
 								"localhost"
 							],
@@ -69,7 +69,7 @@
 							"path": [
 								"api",
 								"users",
-								"2"
+								"3"
 							]
 						}
 					},
@@ -82,7 +82,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"Cambio de nombre\",\n    \"name\": \"Fernando\"\n}",
+							"raw": "{\n    \"username\": \"updatedUsername\",\n    \"name\": \"updatedName\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,7 +90,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:4000/api/users/2",
+							"raw": "localhost:4000/api/users/3",
 							"host": [
 								"localhost"
 							],
@@ -98,7 +98,7 @@
 							"path": [
 								"api",
 								"users",
-								"2"
+								"3"
 							]
 						}
 					},
@@ -119,6 +119,35 @@
 								"api",
 								"users",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"fer@paisano.com\",\n    \"password\":\"simplePassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"login"
 							]
 						}
 					},
