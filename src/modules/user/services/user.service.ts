@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable, pipe, throwError } from 'rxjs';
-import { AuthService } from 'src/modules/auth/services/auth.service';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { User, UserRole } from '../models/user.interface';
+import { AuthService } from 'src/modules/auth/services/auth.service';
 
 @Injectable()
 export class UserService {
