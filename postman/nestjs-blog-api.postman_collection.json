@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Fer2\",\n    \"username\": \"ferchapaisano2\",\n    \"email\":\"fer@paisano.com\",\n    \"password\":\"simplePassword\"\n}",
+							"raw": "{\n    \"name\": \"admin\",\n    \"username\": \"admin4\",\n    \"email\":\"admin4@admin.com\",\n    \"password\":\"simplePassword\",\n    \"role\":\"admin\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -39,6 +39,16 @@
 				{
 					"name": "GET ALL USERS",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxMCwibmFtZSI6ImFkbWluIiwidXNlcm5hbWUiOiJhZG1pbjQiLCJlbWFpbCI6ImFkbWluNEBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4ifSwiaWF0IjoxNjA3Mzg1NzY0LCJleHAiOjE2MDczODU4NjR9.xia0P9BS-zKpjDIWArzbNId7RNG65072iH6ewHrCPoc",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -61,7 +71,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:4000/api/users/3",
+							"raw": "localhost:4000/api/users/4",
 							"host": [
 								"localhost"
 							],
@@ -69,7 +79,7 @@
 							"path": [
 								"api",
 								"users",
-								"3"
+								"4"
 							]
 						}
 					},
@@ -110,7 +120,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:4000/api/users/2",
+							"raw": "localhost:4000/api/users/1",
 							"host": [
 								"localhost"
 							],
@@ -118,7 +128,7 @@
 							"path": [
 								"api",
 								"users",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -148,6 +158,46 @@
 								"api",
 								"users",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER ROLE BY USER ID (PROTECTED WITH JWT AND ROLE)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJuYW1lIjoiRmVyMiIsInVzZXJuYW1lIjoiZmVyY2hhcGFpc2FubzIiLCJlbWFpbCI6ImZlckBwYWlzYW5vLmNvbSIsInJvbGUiOiJ1c2VyIn0sImlhdCI6MTYwNzM4OTA4MCwiZXhwIjoxNjA3Mzk5MDgwfQ.crmf3B-jB7Fkl09_bWvYv0D8sJukUN7aeQBat34L264\"",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role\":\"admin\",\n    \"name\": \"asdasd\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/users/6/role",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"6",
+								"role"
 							]
 						}
 					},

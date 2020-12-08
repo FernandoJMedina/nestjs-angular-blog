@@ -6,10 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { User } from '../models/user.interface';
+import { hasRoles } from 'src/modules/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
+import { User, UserRole } from '../models/user.interface';
 import { UserService } from '../services/user.service';
 
 @Controller('users')
@@ -35,7 +39,7 @@ export class UserController {
   }
 
   @Get(':id')
-  findeOne(@Param('id') id: string): Observable<User> {
+  findeOne(@Param('id') id: number): Observable<User> {
     return this.userService.findOne(id);
   }
 
@@ -45,12 +49,22 @@ export class UserController {
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: string): Observable<any> {
+  deleteOne(@Param('id') id: number): Observable<any> {
     return this.userService.deleteOne(id);
   }
 
   @Put(':id')
-  updateOne(@Param('id') id: string, @Body() user: User): Observable<any> {
+  updateOne(@Param('id') id: number, @Body() user: User): Observable<any> {
     return this.userService.updateOne(id, user);
+  }
+
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put(':id/role')
+  updateRoleUser(
+    @Param('id') id: number,
+    @Body('role') role: UserRole,
+  ): Observable<User> {
+    return this.userService.updateRoleUser(id, role);
   }
 }

@@ -5,7 +5,7 @@ import { AuthService } from 'src/modules/auth/services/auth.service';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { User } from '../models/user.interface';
+import { User, UserRole } from '../models/user.interface';
 
 @Injectable()
 export class UserService {
@@ -23,6 +23,7 @@ export class UserService {
         newUser.username = user.username;
         newUser.email = user.email;
         newUser.password = passwordHash;
+        newUser.role = user.role;
 
         return from(this.userRepository.save(newUser)).pipe(
           map((user: User) => {
@@ -35,7 +36,7 @@ export class UserService {
     );
   }
 
-  findOne(id: string): Observable<User> {
+  findOne(id: number): Observable<User> {
     return from(this.userRepository.findOne(id)).pipe(
       map((user: User) => {
         const { password, ...result } = user;
@@ -55,17 +56,21 @@ export class UserService {
     );
   }
 
-  deleteOne(id: string): Observable<any> {
+  deleteOne(id: number): Observable<any> {
     return from(this.userRepository.delete(id));
   }
 
-  updateOne(id: string, user: User): Observable<any> {
+  updateOne(id: number, user: User): Observable<any> {
     delete user.email;
     delete user.password;
     return from(this.userRepository.update(id, user));
   }
 
-  login(user: User): Observable<string> {
+  updateRoleUser(id: number, role: UserRole): Observable<any> {
+    return from(this.userRepository.update(id, { role }));
+  }
+
+  login(user: User): Observable<string | unknown> {
     // console.log(user);
     return this.validateUser(user.email, user.password).pipe(
       switchMap((user: User) => {
@@ -85,7 +90,6 @@ export class UserService {
       switchMap((user: User) =>
         this.authService.comparePasswords(password, user.password).pipe(
           map((match: boolean) => {
-            console.log(user);
             if (match) {
               const { password, ...result } = user;
               return result;
