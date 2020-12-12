@@ -7,16 +7,36 @@ import {
   Post,
   Put,
   Query,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Pagination, paginate } from 'nestjs-typeorm-paginate';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { hasRoles } from 'src/modules/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { User, UserRole } from '../models/user.interface';
 import { UserService } from '../services/user.service';
+import { diskStorage } from 'multer';
+import { v4 as uuid } from 'uuid';
+import { join, parse } from 'path';
+import { GetUser } from '../decorators/get-user.decorator';
+
+export const storage = {
+  storage: diskStorage({
+    destination: './uploads/profileimages',
+    filename: (req, file, cb) => {
+      const filename =
+        parse(file.originalname).name.replace(/\s/g, '') + uuid();
+      const extension = parse(file.originalname).ext;
+      cb(null, `${filename}${extension}`);
+    },
+  }),
+};
 
 @Controller('users')
 export class UserController {
@@ -89,5 +109,27 @@ export class UserController {
     @Body('role') role: UserRole,
   ): Observable<User> {
     return this.userService.updateRoleUser(id, role);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', storage))
+  uploadFile(@UploadedFile() file, @GetUser() user) {
+    return this.userService
+      .updateOne(user.id, { profileImage: file.filename })
+      .pipe(
+        tap((user: User) => console.log(user)),
+        map((user: User) => ({ profileImage: user.profileImage })),
+      );
+  }
+
+  @Get('profile-image/:imagename')
+  findProfileImage(
+    @Param('imagename') imagename,
+    @Res() res,
+  ): Observable<unknown> {
+    return of(
+      res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)),
+    );
   }
 }
