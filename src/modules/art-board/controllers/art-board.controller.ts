@@ -16,6 +16,9 @@ import { ArtBoardService } from '../services/art-board.service';
 import { v4 as uuid } from 'uuid';
 import * as readXlsxFile from 'read-excel-file/node';
 import { ArtBoard } from '../models/art-board.interface';
+import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
+import { hasRoles } from 'src/modules/auth/decorators/roles.decorator';
+import { UserRole } from 'src/modules/user/models/user.interface';
 
 @Controller('art-board')
 export class ArtBoardController {
@@ -54,6 +57,8 @@ export class ArtBoardController {
       },
     }),
   )
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async uploadFile(@UploadedFile() file) {
     try {
       const data = await readXlsxFile(file.path);
