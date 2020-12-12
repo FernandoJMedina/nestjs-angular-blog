@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import configuration from './config/config';
 import { DatabaseConfig } from './config/database.config';
 import { UserModule } from './modules/user/user.module';
+import { ArtBoardModule } from './modules/art-board/art-board.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from './modules/user/user.module';
       useClass: DatabaseConfig,
     }),
     UserModule,
+    ArtBoardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
